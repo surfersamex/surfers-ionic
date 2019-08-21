@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-row>
+    <ion-col text-start padding-top>
+      <ion-title>AMEX Business Drive</ion-title>
+    </ion-col>
+    <ion-col text-end>
+      <ion-button routerLink="/login" shape="round" fill="outline">
+        <ion-icon slot="start" name="logo-octocat"></ion-icon>
+        Log in
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-header>
+<ion-content>
+
+  <div>
+    <form #form="ngForm" (ngSubmit)="login(form)">
+        <ion-grid>
+          <ion-row color="primary" justify-content-center>
+            <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+              <div text-center>
+                <h3>Log In!</h3>
+              </div>
+              <div padding>
+                <ion-item>
+                  <ion-input name="username" type="username" placeholder="Username" [(ngModel)]="username" required></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input name="password" type="password" placeholder="Password" [(ngModel)]="password" required></ion-input>
+                </ion-item>
+              </div>
+              <div padding>
+                <ion-button size="large" type="submit" [disabled]="form.invalid" expand="block">Log in</ion-button>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </form>
+    </div>
+    <div>
+        <ion-row color="primary" justify-content-center>
+          <a routerLink="/signup">Don't have an AMEX card yet? Sign up!</a>
+          </ion-row>
+    </div>
+
+</ion-content>

@@ -1,13 +1,17 @@
 <ion-header>
   <ion-row>
     <ion-col text-start padding-top>
-      <ion-title>Google Map</ion-title>
+      <ion-title>AMEX Business Drive</ion-title>
     </ion-col>
     <ion-col text-end>
       <ion-button (click)="loadMap()" shape="round" fill="outline">
         <ion-icon slot="start" name="locate"></ion-icon>
         Where I Am
       </ion-button>
+      <ion-button routerLink="/login" shape="round" fill="outline">
+          <ion-icon slot="start" name="beer"></ion-icon>
+          Log out
+        </ion-button>
     </ion-col>
   </ion-row>
 </ion-header>
