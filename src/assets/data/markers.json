@@ -1,0 +1,78 @@
+{
+
+  "type": "FeatureCollection",
+
+  "features": [
+
+    {
+
+      "geometry": {
+
+        "type": "Point",
+
+        "coordinates": [
+		
+		-80.324139,
+			26.151932
+          
+
+        ]
+
+      },
+
+      "type": "Feature",
+
+      "properties": {
+
+        "category": "cafe",
+
+        "hours": "11am - 10pm",
+
+        "description": "Rainforest-themed chain for American fare & cocktails amid jungle flora & animatronic animals.",
+
+        "name": "Rainforest Cafe1",
+
+        "phone": "+44 20 1234 5678"
+
+      }
+
+    },
+
+                 {
+
+      "geometry": {
+
+        "type": "Point",
+
+        "coordinates": [
+		
+		 -80.319590,
+			26.150198         
+
+        ]
+
+      },
+
+      "type": "Feature",
+
+      "properties": {
+
+        "category": "cafe",
+
+        "hours": "11am - 10pm",
+
+        "description": "Happy Hour and Great Food",
+
+        "name": "Matchbox2",
+
+        "phone": "+44 20 1234 5678"
+
+      }
+
+    }
+
+  ]
+
+}
+
+ 
