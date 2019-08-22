@@ -14,6 +14,8 @@ export class GenericModalPage implements OnInit {
     city:String;
     state:String;
     zipCode:String;
+    hours:String;
+    description:String;
 
   constructor(private modalController: ModalController, private navParams: NavParams){}
 
@@ -33,7 +35,9 @@ export class GenericModalPage implements OnInit {
           "addressLine": form.value.addressline,
           "city": form.value.city,
           "state": form.value.state,
-          "zipCode": form.value.zipcode
+          "zipCode": form.value.zipcode,
+          "hours": form.value.hours,
+          "description": form.value.description
       };
 
       console.log("request sending... " + JSON.stringify(req));

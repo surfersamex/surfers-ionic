@@ -34,9 +34,17 @@
                                 <ion-input name='zipcode' type='text' placeholder='Zip Code' [(ngModel)]='zipcode' required>
                                 </ion-input>
                             </ion-item>
+                            <ion-item>
+                                <ion-input name='hours' type='text' placeholder='Hours' [(ngModel)]='hours'>
+                                </ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-textarea name='description' placeholder='Short description here...' [(ngModel)]='description'>
+                                </ion-textarea>
+                            </ion-item>
                         </div>
                         <div padding>
-                            <ion-button size="large" type="submit" [disabled]="form.invalid" expand="block">Sign Up
+                            <ion-button size="large" type="submit" [disabled]="form.invalid" expand="block">Add
                             </ion-button>
                         </div>
                     </ion-col>

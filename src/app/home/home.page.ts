@@ -3,8 +3,10 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 import { Http } from '@angular/http';
 import { map } from 'rxjs/operators';
+import { ModalController } from '../../../node_modules/@ionic/angular';
+import { LoginPage } from '../login/login.page';
 import { GenericModalPage } from './modal/add.business.modal.page';
-import { ModalController } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 
 
 declare var google;
@@ -15,19 +17,28 @@ declare var google;
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  @ViewChild('map', {static: true}) mapElement: ElementRef;
+  @ViewChild('map', { static: true }) mapElement: ElementRef;
   map: any;
   address: string;
+
   modalData: any;
+
+  loggedIn: boolean;
 
   constructor(
     private geolocation: Geolocation,
     private nativeGeocoder: NativeGeocoder,
     private http: Http,
-    private modalController: ModalController) {
+    private modalController: ModalController,
+    private storage: Storage) {
+
+    this.loadMap();
+    storage.get('loggedIn').then((val) => {
+      this.loggedIn = val === 'true';
+    });
   }
 
-  async openModal(){
+  async addBusinessModel() {
     const modal = await this.modalController.create({
       component: GenericModalPage,
       componentProps: {
@@ -37,7 +48,7 @@ export class HomePage {
     });
 
     modal.onDidDismiss().then((modalData) => {
-      if(modalData != null){
+      if (modalData != null) {
         this.modalData = modalData.data;
         console.log("retuend -> " + modalData);
       }
@@ -45,11 +56,25 @@ export class HomePage {
     return await modal.present();
   }
 
+  async openModal() {
+    const modal = await this.modalController.create({
+      component: LoginPage
+    });
+    modal.onDidDismiss()
+      .then((data) => {
+        this.loggedIn = data['data'] === 'true'; // Here's your selected user!
+      });
+    return await modal.present();
+  }
+
+  logout() {
+    this.storage.set('loggedIn', false);
+    this.loggedIn = false;
+  }
   ngInit() {
   }
 
   afterViewInit() {
-    this.loadMap();
   }
 
   loadMap() {
@@ -57,7 +82,7 @@ export class HomePage {
       const latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
       const mapOptions = {
         center: latLng,
-        zoom: 15,
+        zoom: 14,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       };
 
@@ -70,66 +95,66 @@ export class HomePage {
         this.getAddressFromCoords(this.map.center.lat(), this.map.center.lng());
       });
 
+      this.getMarkers();
     }).catch((error) => {
       console.log('Error getting location', error);
     });
-
-    this.getMarkers();
   }
 
   getMarkers() {
     this.http.get('../../assets/data/markers.json')
-    .pipe(map((res) => res.json()))
-    .subscribe(data => {
-      console.log('my data: ', data);
-      this.addMarkersToMap(data.features);
-    });
+      .pipe(map((res) => res.json()))
+      .subscribe(data => {
+        console.log('my data: ', data);
+        this.addMarkersToMap(data.features);
+      });
   }
   addMarkersToMap(markers) {
     for (const marker of markers) {
       const position = new google.maps.LatLng(marker.geometry.coordinates[1], marker.geometry.coordinates[0]);
       const icon = {
-        url: '../../assets/icon/american_express.png', // image url
+        url: marker.properties.icon, // image url
         scaledSize: new google.maps.Size(50, 50), // scaled size
       };
       const customMarker = new google.maps.Marker({
         position: position,
-         title: marker.properties.name,
-         map: this.map,
-         icon: icon});
+        title: marker.properties.name,
+        map: this.map,
+        icon: icon
+      });
       const contentString = '<div id="content">' +
-          '<div id="siteNotice">' +
-          '</div>' +
-          '<h1 id="firstHeading" class="firstHeading">' + marker.properties.name + '</h1>' +
-          '<div id="bodyContent">' +
-          '<img src="../../assets/icon/american_express.png" width="200">' +
-          '<p>' + marker.properties.description + '</p>' +
-          '<ion-button>Report</ion-button>' +
-          '</div>' +
-          '</div>';
+        '<div id="siteNotice">' +
+        '</div>' +
+        '<h1 id="firstHeading" class="firstHeading">' + marker.properties.name + '</h1>' +
+        '<div id="bodyContent">' +
+        '<img src="' + marker.properties.logo + '" width="200">' +
+        '<p>' + marker.properties.description + '</p>' +
+        '<ion-button>Report</ion-button>' +
+        '</div>' +
+        '</div>';
       const infowindow = new google.maps.InfoWindow({
         content: contentString,
         maxWidth: 400
       });
-      customMarker.addListener('click', function() {
-          infowindow.open(map, customMarker);
-          customMarker.setMap(this.map);
+      customMarker.addListener('click', function () {
+        infowindow.open(map, customMarker);
+        customMarker.setMap(this.map);
         //this.map.setZoom(8);
       });
       //google.maps.event.addListener(marker, 'click', (function(marker) {
-//        return function(evt) {
-  //        var content = marker.getTitle();
-    //      infowindow.setContent(content);
+      //        return function(evt) {
+      //        var content = marker.getTitle();
+      //      infowindow.setContent(content);
       //    infowindow.open(map, marker);
-       // }
+      // }
       //})(marker));
 
-     // marker.addListener('click', function() {
-       // infowindow.open(map, marker);
-     // locations.setMap(this.map);
-    //});
+      // marker.addListener('click', function() {
+      // infowindow.open(map, marker);
+      // locations.setMap(this.map);
+      //});
+    }
   }
-}
 
   getAddressFromCoords(lattitude, longitude) {
     console.log('getAddressFromCoords ' + lattitude + '' + longitude);
@@ -143,7 +168,7 @@ export class HomePage {
         this.address = '';
         const responseAddress = [];
         for (const [key, value] of Object.entries(result[0])) {
-          if ( value.length > 0 ) {
+          if (value.length > 0) {
             responseAddress.push(value);
           }
         }

@@ -8,7 +8,8 @@
         <ion-icon slot="start" name="locate"></ion-icon>
         Where I Am
       </ion-button>
-      <ion-button (click)="openModal()" shape='round' fill='outline'>
+
+      <ion-button (click)="addBusinessModel()" shape='round' fill='outline'>
         <ion-icon slot='start' name='add'></ion-icon>
         Add Business
       </ion-button>
@@ -16,6 +17,14 @@
           <ion-icon slot="start" name="beer"></ion-icon>
           Log out
         </ion-button>
+      <ion-button shape="round" fill="outline" (click)="openModal()" *ngIf="!loggedIn">
+        <ion-icon slot="start" name="logo-octocat"></ion-icon>
+        Log in
+      </ion-button>
+      <ion-button shape="round" fill="outline" (click)="logout()" *ngIf="loggedIn">
+        <ion-icon slot="start" name="beer"></ion-icon>
+        Log out
+      </ion-button>
     </ion-col>
   </ion-row>
 </ion-header>
