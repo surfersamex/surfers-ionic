@@ -3,6 +3,9 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 import { Http } from '@angular/http';
 import { map } from 'rxjs/operators';
+import { ModalController } from '../../../node_modules/@ionic/angular';
+import { LoginPage } from '../login/login.page';
+import { Storage } from '@ionic/storage';
 
 
 declare var google;
@@ -16,18 +19,40 @@ export class HomePage {
   @ViewChild('map', {static: true}) mapElement: ElementRef;
   map: any;
   address: string;
+  loggedIn: boolean;
 
   constructor(
     private geolocation: Geolocation,
     private nativeGeocoder: NativeGeocoder,
-    private http: Http) {
+    private modalCtrl: ModalController,
+    private http: Http,
+    private storage: Storage) {
+
+      this.loadMap();
+      storage.get('loggedIn').then((val) => {
+          this.loggedIn = val === 'true';
+      });
   }
 
+  async openModal() {
+      const modal = await this.modalCtrl.create({
+        component: LoginPage
+      });
+      modal.onDidDismiss()
+      .then((data) => {
+        this.loggedIn = data['data'] === 'true'; // Here's your selected user!
+    });
+      return await modal.present();
+  }
+
+  logout() {
+    this.storage.set('loggedIn', false);
+    this.loggedIn = false;
+  }
   ngInit() {
   }
 
   afterViewInit() {
-    this.loadMap();
   }
 
   loadMap() {
@@ -35,7 +60,7 @@ export class HomePage {
       const latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
       const mapOptions = {
         center: latLng,
-        zoom: 15,
+        zoom: 14,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       };
 
@@ -48,11 +73,10 @@ export class HomePage {
         this.getAddressFromCoords(this.map.center.lat(), this.map.center.lng());
       });
 
+      this.getMarkers();
     }).catch((error) => {
       console.log('Error getting location', error);
     });
-
-    this.getMarkers();
   }
 
   getMarkers() {
@@ -67,7 +91,7 @@ export class HomePage {
     for (const marker of markers) {
       const position = new google.maps.LatLng(marker.geometry.coordinates[1], marker.geometry.coordinates[0]);
       const icon = {
-        url: '../../assets/icon/american_express.png', // image url
+        url: marker.properties.icon, // image url
         scaledSize: new google.maps.Size(50, 50), // scaled size
       };
       const customMarker = new google.maps.Marker({
@@ -80,7 +104,7 @@ export class HomePage {
           '</div>' +
           '<h1 id="firstHeading" class="firstHeading">' + marker.properties.name + '</h1>' +
           '<div id="bodyContent">' +
-          '<img src="../../assets/icon/american_express.png" width="200">' +
+          '<img src="' + marker.properties.logo + '" width="200">' +
           '<p>' + marker.properties.description + '</p>' +
           '<ion-button>Report</ion-button>' +
           '</div>' +

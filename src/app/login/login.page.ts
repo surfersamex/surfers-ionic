@@ -1,25 +1,29 @@
-import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
-import { Navigation } from 'selenium-webdriver';
+import { Component, OnInit } from "@angular/core";
+import { NavController, ModalController } from "@ionic/angular";
+import { Storage } from "@ionic/storage";
+import { ViewController } from "../../../node_modules/@ionic/core";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  selector: "app-login",
+  templateUrl: "./login.page.html",
+  styleUrls: ["./login.page.scss"]
 })
 export class LoginPage implements OnInit {
-
-  constructor(public navCtrl: NavController) { }
-
-  ngOnInit() {
-  }
-
   username: string;
   password: string;
+
+  constructor(
+    public navCtrl: NavController,
+    private storage: Storage,
+    private modalCtrl: ModalController
+  ) {}
+
+  ngOnInit() {}
 
   login() {
     this.username = "";
     this.password = "";
-    this.navCtrl.navigateForward("/home")
+    this.storage.set("loggedIn", "true");
+    this.modalCtrl.dismiss('true');
   }
 }

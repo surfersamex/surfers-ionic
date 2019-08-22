@@ -11,12 +11,19 @@ import { AppRoutingModule } from './app-routing.module';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { HttpModule } from '@angular/http';
+import { LoginPageModule } from './login/login.module';
+import { IonicStorageModule } from '@ionic/storage';
 
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, HttpModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [BrowserModule,
+    HttpModule,
+    IonicModule.forRoot(),
+    IonicStorageModule.forRoot(),
+    AppRoutingModule,
+    LoginPageModule],
   providers: [
     StatusBar,
     SplashScreen,
