@@ -1,0 +1,49 @@
+<ion-header>
+    <ion-toolbar text-center>
+        <ion-title>{{modalTitle}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <div>
+        <form #form="ngForm" (ngSubmit)="addBusiness(form)">
+            <ion-grid>
+                <ion-row color="primary" justify-content-center>
+                    <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+                        <div text-center>
+                            <h3>Add Business</h3>
+                        </div>
+                        <div padding>
+                            <ion-item>
+                                <ion-input name='businessName' type='text' placeholder='Business Name'
+                                    [(ngModel)]='businessName' required></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-input name='addressline' type='text' placeholder='Address'
+                                    [(ngModel)]='addressline' required></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-input name='city' type='text' placeholder='City' [(ngModel)]='city' required>
+                                </ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-input name='state' type='text' placeholder='State' [(ngModel)]='state' required>
+                                </ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-input name='zipcode' type='text' placeholder='Zip Code' [(ngModel)]='zipcode' required>
+                                </ion-input>
+                            </ion-item>
+                        </div>
+                        <div padding>
+                            <ion-button size="large" type="submit" [disabled]="form.invalid" expand="block">Sign Up
+                            </ion-button>
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </form>
+
+    </div>
+
+</ion-content>

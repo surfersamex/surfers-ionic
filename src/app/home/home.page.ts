@@ -3,6 +3,8 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 import { Http } from '@angular/http';
 import { map } from 'rxjs/operators';
+import { GenericModalPage } from './modal/add.business.modal.page';
+import { ModalController } from '@ionic/angular';
 
 
 declare var google;
@@ -16,11 +18,31 @@ export class HomePage {
   @ViewChild('map', {static: true}) mapElement: ElementRef;
   map: any;
   address: string;
+  modalData: any;
 
   constructor(
     private geolocation: Geolocation,
     private nativeGeocoder: NativeGeocoder,
-    private http: Http) {
+    private http: Http,
+    private modalController: ModalController) {
+  }
+
+  async openModal(){
+    const modal = await this.modalController.create({
+      component: GenericModalPage,
+      componentProps: {
+        "paramId": "test",
+        "paramTitle": "Add Business"
+      }
+    });
+
+    modal.onDidDismiss().then((modalData) => {
+      if(modalData != null){
+        this.modalData = modalData.data;
+        console.log("retuend -> " + modalData);
+      }
+    });
+    return await modal.present();
   }
 
   ngInit() {
