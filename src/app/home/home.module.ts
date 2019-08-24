@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 
 import { HomePage } from './home.page';
 import { GenericModalPage } from './modal/add.business.modal.page';
+import { SignupPage } from '../signup/signup.page';
 
 @NgModule({
   imports: [
@@ -19,7 +20,7 @@ import { GenericModalPage } from './modal/add.business.modal.page';
       }
     ])
   ],
-  declarations: [HomePage, GenericModalPage],
-  entryComponents: [GenericModalPage]
+  declarations: [HomePage, GenericModalPage, SignupPage],
+  entryComponents: [GenericModalPage, SignupPage]
 })
 export class HomePageModule {}

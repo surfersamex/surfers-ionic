@@ -69,7 +69,7 @@ export class SignupPage implements OnInit {
                                                           "password": this.password}));
         this.clearInputs();
         this.storage.set("loggedIn", "true");
-        this.modalCtrl.dismiss('true');
+        this.modalCtrl.dismiss({loggedin : 'true', signUp : 'true'});
         //this.navCtrl.navigateForward("/home");
       }
     });

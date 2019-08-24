@@ -43,12 +43,16 @@ export class LoginPage implements OnInit {
     this.storage.get(this.username).then(value => {
       if (value != null && JSON.parse(value).password === this.password) {
         this.clearInputs();
-        this.storage.set("loggedIn", "true");
-        this.modalCtrl.dismiss('true');
+        this.storage.set('loggedIn', 'true');
+        this.modalCtrl.dismiss({loggedin : 'true', signUp : 'true'});
       } else {
         this.clearInputs();
-        this.showToast("Invalid Username/Password", 3000);
+        this.showToast('Invalid Username/Password', 3000);
       }
-    });    
+    });
+  }
+
+  navigateToSignUp() {
+    this.modalCtrl.dismiss({loggedin : 'false', signUp : 'true'});
   }
 }
